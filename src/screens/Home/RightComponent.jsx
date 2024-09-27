@@ -9,111 +9,122 @@ import { PlaygroundContext } from '../../context/PlaygroundContext'
 import { useNavigate } from 'react-router-dom'
 
 const StyledRightComponent = styled.div`
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 60%;
-    padding: 2rem;
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
 
-    @media (max-width: 768px){
-        position: relative;
-        width: 100%;
-        padding: 1rem 0.5rem;
-    }
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 `
 
 const Header = styled.div`
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
   justify-content: space-between;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #989898;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 `
 
-const Heading = styled.h3`
-  font-size: ${props => props.size === 'small' ? "1.25rem" : "1.75rem"};
-  font-weight: 400;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  span{
-    font-weight: 700;
+const Heading = styled.h2`
+  font-size: 1.8rem;
+  color: #2c3e50;
+`
+
+const AddButton = styled.button`
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: #2ecc71;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #27ae60;
   }
 `
 
-const AddButton = styled.div`
-    font-size: 1rem;
-    border-radius: 30px;
-    color: black;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    span{
-        font-size: 1.5rem;
-        font-weight: 700;
-    }
-
-    &:hover{
-        cursor: pointer;
-    }
+const FolderCard = styled.div`
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  padding: 1rem;
 `
 
-const FolderCard = styled.div`
-    margin-bottom: 1rem;
+const FolderHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+`
+
+const FolderTitle = styled.h3`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+  color: #34495e;
 `
 
 const FolderIcons = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-    cursor: pointer;
+  display: flex;
+  gap: 1rem;
+`
+
+const IconButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #34495e;
+  }
 `
 
 const PlayGroundCards = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-
-    @media (max-width: 428px){
-        grid-template-columns: 1fr;
-    }    
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
 `
 
 const Card = styled.div`
-    padding: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-radius: 8px;
-    box-shadow: 0 0 4px 0px #989898;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-
-    &:hover{
-      scale: 1.05;
-      box-shadow: 0 0 8px 0px #989898;
-    }
-`
-
-const CardContainer = styled.div`
+  background-color: #ecf0f1;
+  border-radius: 8px;
+  padding: 1rem;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  transition: all 0.2s;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
 `
 
 const CardContent = styled.div`
+  flex: 1;
+`
+
+const CardTitle = styled.h4`
+  margin: 0;
+  color: #2c3e50;
+`
+
+const CardLanguage = styled.p`
+  margin: 0.5rem 0 0;
+  color: #7f8c8d;
 `
 
 const Logo = styled.img`
-    width: 70px;
-    margin-right: 1rem;
-
-    @media (max-width: 425px){
-        width: 50px;
-        margin-right: 0.5rem;
-    }
+  width: 40px;
+  margin-bottom: 0.5rem;
 `
+
 const RightComponent = () => {
   const navigate = useNavigate();
 
@@ -123,7 +134,7 @@ const RightComponent = () => {
   return (
     <StyledRightComponent>
       <Header>
-        <Heading size="large">
+        <Heading>
           My <span>Playground</span>
         </Heading>
         <AddButton onClick={() => openModal({
@@ -133,26 +144,26 @@ const RightComponent = () => {
             folderId: "",
             cardId: "",
           }
-        })}> <span>+</span> New Folder</AddButton>
+        })}> + New Folder</AddButton>
       </Header>
 
       {
         Object.entries(folders).map(([folderId, folder]) => (
           <FolderCard key={folderId}>
-            <Header>
-              <Heading size="small">
+            <FolderHeader>
+              <FolderTitle>
                 <FcOpenedFolder /> {folder.title}
-              </Heading>
+              </FolderTitle>
               <FolderIcons>
-                <IoTrashOutline onClick={() => deleteFolder(folderId)} />
-                <BiEditAlt onClick={() => openModal({
+                <IconButton onClick={() => deleteFolder(folderId)}><IoTrashOutline /></IconButton>
+                <IconButton onClick={() => openModal({
                   show: true,
                   modalType: 4,
                   identifiers: {
                     folderId: folderId,
                     cardId: "",
                   }
-                })} />
+                })}><BiEditAlt /></IconButton>
                 <AddButton onClick={() => openModal({
                   show: true,
                   modalType: 2,
@@ -160,9 +171,9 @@ const RightComponent = () => {
                     folderId: folderId,
                     cardId: "",
                   }
-                })}><span>+</span> New Playground</AddButton>
+                })}>+ New Playground</AddButton>
               </FolderIcons>
-            </Header>
+            </FolderHeader>
 
             <PlayGroundCards>
               {
@@ -170,25 +181,23 @@ const RightComponent = () => {
                   <Card key={playgroundId} onClick={() => {
                     navigate(`/playground/${folderId}/${playgroundId}`)
                   }}>
-                    <CardContainer>
-                      <Logo src={logo} />
-                      <CardContent>
-                        <p>{playground.title}</p>
-                        <p>Language: {playground.language}</p>
-                      </CardContent>
-                    </CardContainer>
+                    <Logo src={logo} />
+                    <CardContent>
+                      <CardTitle>{playground.title}</CardTitle>
+                      <CardLanguage>Language: {playground.language}</CardLanguage>
+                    </CardContent>
                     <FolderIcons onClick={(e) => {
                       e.stopPropagation(); //stop click propagation from child to parent
                     }}>
-                      <IoTrashOutline onClick={() => deleteCard(folderId, playgroundId)} />
-                      <BiEditAlt onClick={() => openModal({
+                      <IconButton onClick={() => deleteCard(folderId, playgroundId)}><IoTrashOutline /></IconButton>
+                      <IconButton onClick={() => openModal({
                         show: true,
                         modalType: 5,
                         identifiers: {
                           folderId: folderId,
                           cardId: playgroundId,
                         }
-                      })} />
+                      })}><BiEditAlt /></IconButton>
                     </FolderIcons>
                   </Card>
                 ))
